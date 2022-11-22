@@ -6,8 +6,8 @@ import { Box, Container } from "../styles/layout";
 
 export default function NavBar() {
   const router = useRouter();
-  const navMenus = ["홈", "일정관리", "교환일기", "마이페이지"];
-  const navLinks = ["/", "/planner", "/diary", "/mypage"];
+  const navMenus = ["스탬프", "일정관리", "교환일기", "마이페이지"];
+  const navLinks = ["/stamp", "/planner", "/diary", "/mypage"];
 
   return (
     <Nav>
@@ -70,7 +70,7 @@ const LinkButton = styled.div`
   }
   &:hover {
     background-color: rgba(245, 245, 245, 0.5);
-    /* font-size: ${props=> props.theme.fontSize.textLg}; */
+    /* font-size: ${props => props.theme.fontSize.textLg}; */
   }
 `;
 
