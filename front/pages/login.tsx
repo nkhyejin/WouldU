@@ -24,16 +24,16 @@ const login = () => {
   } = useForm<UserLoginForm>();
 
   const onLoginSubmit = async (data: UserLoginForm) => {
-    try {
-      const { access_token } = await requestLogin(data);
-      if (access_token) {
-        //현재 백엔드에서 access_token만 줘서 임으로 데이터 넣어줌.
-        console.log("로그인!");
-        setUser({ email: "hjinnny@naver.com", access_token, nickname: "hyejin" });
-
-        router.push("/");
-      }
-    } catch (err) {}
+    console.log("로그이 next-auth 테스트중이라 전 코드 주석처리");
+    // try {
+    //   const { access_token } = await requestLogin(data);
+    //   if (access_token) {
+    //     //현재 백엔드에서 access_token만 줘서 임으로 데이터 넣어줌.
+    //     console.log("로그인!");
+    //     setUser({ email: "hjinnny@naver.com", access_token, nickname: "hyejin" });
+    //     router.push("/");
+    //   }
+    // } catch (err) {}
   };
 
   return (
