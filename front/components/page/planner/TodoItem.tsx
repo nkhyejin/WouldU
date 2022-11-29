@@ -1,8 +1,11 @@
-import { createAtom } from "@recoil/planner";
+import { createAtom, dayAtom } from "@recoil/planner";
+import { updatePlan } from "@services/api/planner";
+import { formatDate } from "@services/utils/formatDate";
 import { Box } from "@styles/layout";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Planner } from "@type/planner";
 import React, { useState } from "react";
-import { useRecoilState, useSetRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import styled, { css } from "styled-components";
 import CircleCheck from "/public/icon/circlecheck.svg";
 import CircleCheckBack from "/public/icon/circlecheckback.svg";
@@ -10,6 +13,26 @@ import Trash from "/public/icon/trash.svg";
 
 const TodoItem = (plan: Planner) => {
   const [isCreateOpen, setIsCreateOpen] = useRecoilState(createAtom);
+  const [todo, setTodo] = useState({
+    id: "",
+    description: "",
+    date: "",
+    priority: 1,
+    isCompleted: false,
+  });
+  const queryClient = useQueryClient();
+
+  const recoilDay = useRecoilValue<Date>(dayAtom);
+  const day = formatDate(recoilDay);
+
+  const UpdateMutation = useMutation((data: Planner) => updatePlan(data), {
+    onSuccess: (data) => {
+      queryClient.setQueryData(['plan',{ id : "id" }], data);
+      queryClient.invalidateQueries(["plan", day]);
+    }
+  });
+  
+
   const handleToggle = () => {
     // isCompleted 상태 바꾸며, patch 요청
     // 계속 누를때마다 요청을 하는거면...? nest patch는 일부분만 가긴하지만 부하걸릴것이 걱정이다.
@@ -17,8 +40,21 @@ const TodoItem = (plan: Planner) => {
   const handleRemoveTodo = () => {
     //delete 요청
   };
-  const handleUpdateTodo = () => {
+  const update = async (data: Planner) => {
+    try {
+      await UpdateMutation.mutate({ ...data })
+    } catch(e) {
+      console.log("error")
+    }
+  }
+
+
+  const handleUpdateTodo = (event: React.MouseEvent<HTMLButtonElement>) => {
     setIsCreateOpen(true);
+    const {
+      currentTarget: { value },
+    } = event;
+    console.log(value);
   };
 
   return (
@@ -26,7 +62,7 @@ const TodoItem = (plan: Planner) => {
       <CheckBox onClick={handleToggle}>{plan.isCompleted ? <CircleCheckSvg /> : <CircleCheckBackSvg />}</CheckBox>
       <Text>{plan.description}</Text>
       <ButtonBox>
-        <Button onClick={handleUpdateTodo}>수정</Button>
+        <Button onClick={handleUpdateTodo} value={todo.description}>수정</Button>
         <Button onClick={handleRemoveTodo}>삭제</Button>
       </ButtonBox>
     </TodoBox>

@@ -36,3 +36,28 @@ export const createPlan = async (planInfo: Planner) => {
     }
   }
 };
+
+//플랜수정
+export const updatePlan = async (planInfo: Planner) => {
+  const { id } = planInfo;
+  try {
+    const { status } = await axiosInstance.put(`planner/${id}`, planInfo);
+    return status;
+  } catch (err) {
+    if (axios.isAxiosError(err) && err?.response?.status === 412) {
+      return err.response.status;
+    }
+  }
+};
+
+//플랜삭제
+export const deletePlan = async (id: string) => {
+  try {
+    const { status } = await axiosInstance.put(`planner/${id}`);
+    return status;
+  } catch (err) {
+    if (axios.isAxiosError(err) && err?.response?.status === 422) {
+      return err.response.status;
+    }
+  }
+};
