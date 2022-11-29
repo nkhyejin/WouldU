@@ -30,6 +30,7 @@ const TodoList = () => {
       {todos?.map(todo => (
         <TodoItem key={todo.id} id={todo.id} description={todo.description} isCompleted={todo.isCompleted} />
       ))}
+      <TodoItem id={"123"} description={"testtest"} isCompleted={false} />
     </ListContainer>
   );
 };

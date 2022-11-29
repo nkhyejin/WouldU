@@ -1,18 +1,18 @@
-import { dayAtom } from "@recoil/planner";
+import { createAtom, dayAtom } from "@recoil/planner";
 import { colors } from "@styles/common_style";
 import { Box, Container } from "@styles/layout";
 import { QueryClient, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Planner } from "@type/planner";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import styled from "styled-components";
 import { createPlan } from "../../../services/api/planner";
 import { formatDate } from "../../../services/utils/formatDate";
 import CirclePlus from "/public/icon/circleplus.svg";
 
 const TodoCreate = () => {
-  const [open, setOpen] = useState(false);
+  const [isCreateOpen, setIsCreateOpen] = useRecoilState(createAtom);
 
   const {
     register,
@@ -22,7 +22,7 @@ const TodoCreate = () => {
   } = useForm<{ description: string }>();
   const queryClient = useQueryClient();
 
-  const handleToggle = () => setOpen(!open);
+  const handleToggle = () => setIsCreateOpen(!isCreateOpen);
 
   //달력날짜에 프롭스로 받아서 변경될 예정
   const recoilDay = useRecoilValue<Date>(dayAtom);
@@ -42,13 +42,13 @@ const TodoCreate = () => {
   const onCreateSubmit = async (data: Planner) => {
     // priority는 옵션임으로, 우선 1로 셋팅해놓음.
     updateMutation.mutate({ date: day, ...data, priority: 1 });
-    setOpen(false);
+    setIsCreateOpen(false);
     resetField("description");
   };
 
   return (
     <>
-      {open ? (
+      {isCreateOpen ? (
         <CreateContainer>
           <InsertForm onSubmit={handleSubmit(onCreateSubmit)}>
             <BtnBox onClick={handleToggle}>

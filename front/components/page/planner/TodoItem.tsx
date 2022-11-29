@@ -1,3 +1,4 @@
+import { createAtom } from "@recoil/planner";
 import { Box } from "@styles/layout";
 import { Planner } from "@type/planner";
 import React, { useState } from "react";
@@ -8,6 +9,7 @@ import CircleCheckBack from "/public/icon/circlecheckback.svg";
 import Trash from "/public/icon/trash.svg";
 
 const TodoItem = (plan: Planner) => {
+  const [isCreateOpen, setIsCreateOpen] = useRecoilState(createAtom);
   const handleToggle = () => {
     // isCompleted 상태 바꾸며, patch 요청
     // 계속 누를때마다 요청을 하는거면...? nest patch는 일부분만 가긴하지만 부하걸릴것이 걱정이다.
@@ -15,32 +17,50 @@ const TodoItem = (plan: Planner) => {
   const handleRemoveTodo = () => {
     //delete 요청
   };
+  const handleUpdateTodo = () => {
+    setIsCreateOpen(true);
+  };
 
   return (
     <TodoBox className={plan.isCompleted ? "finish" : ""}>
       <CheckBox onClick={handleToggle}>{plan.isCompleted ? <CircleCheckSvg /> : <CircleCheckBackSvg />}</CheckBox>
       <Text>{plan.description}</Text>
-      <Remove onClick={handleRemoveTodo}>
-        <Trash />
-      </Remove>
+      <ButtonBox>
+        <Button onClick={handleUpdateTodo}>수정</Button>
+        <Button onClick={handleRemoveTodo}>삭제</Button>
+      </ButtonBox>
     </TodoBox>
   );
 };
 
-const Remove = styled.div`
+const ButtonBox = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   display: none;
 `;
-
+const Button = styled.button`
+  background-color: inherit;
+  color: ${props => props.theme.color.fontSub};
+  border-radius: 0;
+  padding: 0 0.8em;
+  font-size: 10px;
+  &:first-child {
+    border-right: 1px solid ${props => props.theme.color.fontSub};
+  }
+  &:hover {
+    background-color: inherit;
+    color: ${props => props.theme.color.fontMain};
+    font-weight: 600;
+  }
+`;
 const Text = styled.p``;
 
 const TodoBox = styled(Box)`
   position: relative;
   justify-content: space-between;
-  padding: 1em 2em;
+  padding: 1em 0.5em 1em 2em;
   width: 100%;
   height: 4em;
   margin-bottom: 1em;
@@ -48,7 +68,7 @@ const TodoBox = styled(Box)`
   border: 1px solid ${props => props.theme.color.borderPoint};
 
   &:hover {
-    ${Remove} {
+    ${ButtonBox} {
       display: initial;
     }
   }
@@ -64,21 +84,6 @@ const TodoBox = styled(Box)`
 `;
 const CheckBox = styled(Box)`
   margin: 0;
-  padding: 0;
-  position: absolute;
-  left: -15px;
-  cursor: pointer;
-`;
-
-const CheckCircle = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 35px;
-  height: 35px;
-  background-color: ${props => props.theme.color.purpleBox};
-  border: 3px solid ${props => props.theme.color.point};
-  border-radius: 50%;
   padding: 0;
   position: absolute;
   left: -15px;
