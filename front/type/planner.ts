@@ -5,3 +5,8 @@ export interface Planner {
   priority?: number;
   isCompleted?: number;
 }
+
+export interface MonthPlan {
+  nowYear: number;
+  nowMonth: number;
+}

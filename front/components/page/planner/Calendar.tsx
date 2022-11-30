@@ -1,5 +1,8 @@
 import { dayAtom } from "@recoil/planner";
+import { getMonthplan } from "@services/api/planner";
 import { Box } from "@styles/layout";
+import { useQuery } from "@tanstack/react-query";
+import { MonthPlan } from "@type/planner";
 import * as React from "react";
 import { useState, useEffect } from "react";
 import { useRecoilState } from "recoil";
@@ -22,6 +25,16 @@ const Calendar = () => {
   const [year, setYear] = useState(date?.getFullYear());
   const [startDay, setStartDay] = useState(getStartDayOfMonth(date!));
 
+  const nowYear = pickDay.getFullYear();
+  const nowMonth = pickDay.getMonth() + 1;
+ 
+  const { data } = useQuery(["plan"], () => getMonthplan({nowYear, nowMonth}));
+  console.log("monthplandata:",data);
+
+  useEffect(() => {
+    console.log("년 월",nowYear, nowMonth)
+  },[nowMonth]);
+
   useEffect(() => {
     setDate(pickDay);
   }, []);
@@ -34,9 +47,9 @@ const Calendar = () => {
     setPickDay(date);
   }, [date]);
 
-  useEffect(() => {
-    console.log(pickDay);
-  }, [pickDay]);
+  // useEffect(() => {
+  //   console.log(pickDay);
+  // }, [pickDay]);
 
   function getStartDayOfMonth(date: Date) {
     const startDate = new Date(date.getFullYear(), date.getMonth(), 1).getDay();

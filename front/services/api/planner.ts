@@ -1,4 +1,4 @@
-import { Planner } from "@type/planner";
+import { MonthPlan, Planner } from "@type/planner";
 import axios from "axios";
 import { axiosInstance } from "./axiosInstance";
 
@@ -66,6 +66,16 @@ export const checkPlan = async (id: number) => {
     // console.log("checkPlan");
     const { status } = await axiosInstance.patch(`planner/${id}`);
     return status;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+//전체 날짜의 일정
+export const getMonthplan = async ({nowYear, nowMonth} : MonthPlan) => {
+  try {
+    const { data } = await axiosInstance.get(`planner/check/month?year=${nowYear}&month=${nowMonth}`);
+    return data;
   } catch (err) {
     console.log(err);
   }
