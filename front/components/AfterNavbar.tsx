@@ -4,18 +4,22 @@ import Logo from "/public/icon/logoblack.svg";
 import { useRouter } from "next/router";
 import styled from "styled-components";
 import { Box, Container } from "../styles/layout";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { userAtom } from "../recoil/user";
 import { useEffect, useState } from "react";
 import { User } from "@type/user";
+import { isDarkAtom } from "@recoil/darkmode";
 
 export default function AfterNavBar() {
   const router = useRouter();
   const navMenus = ["홈", "일정관리", "교환일기", "마이페이지"];
   const navLinks = ["/stamp", "/planner", "/diary", "/mypage"];
-
+  
+  const setIsDarkMode = useSetRecoilState(isDarkAtom);
   const [userAtomData, setUserAtomData] = useRecoilState(userAtom);
   const [user, setUser] = useState<User | null>();
+
+  const handleDarkmode = () => setIsDarkMode((prev) => !prev);
 
   useEffect(() => {
     setUser(userAtomData);
@@ -42,6 +46,9 @@ export default function AfterNavBar() {
         <Image src="/icon/user.svg" alt="user" width={60} height={60} />
         <TextBox1>{`${user?.nickname} 님`}</TextBox1>
       </UserBox>
+      <DarkModeButton onClick={handleDarkmode}>
+        다크모드
+      </DarkModeButton>
       {/* navigation 구현 */}
       <NavLink>
         {navMenus.map((menu, index) => (
@@ -70,6 +77,9 @@ const Nav = styled(Container)`
 const LogoBox = styled(Logo)`
   width: 100%;
   overflow: visible;
+`;
+const DarkModeButton = styled.button`
+  background-color: palegoldenrod;
 `;
 const NavLink = styled(Container)`
   flex-direction: column;
@@ -104,7 +114,7 @@ const LinkButton = styled.div`
 const UserBox = styled(Container)`
   flex-direction: column;
   width: 35%;
-  margin: 3em 0;
+  margin: 0;
 `;
 const AlarmButton = styled(Box)`
   width: 100%;
@@ -114,7 +124,4 @@ const AlarmButton = styled(Box)`
 const TextBox1 = styled(Box)`
   margin-top: 20px;
   font-size: ${props => props.theme.fontSize.textMain};
-`;
-const TextBox2 = styled(TextBox1)`
-  font-size: ${props => props.theme.fontSize.textSm};
 `;

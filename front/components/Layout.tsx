@@ -7,16 +7,19 @@ import { Container } from "../styles/layout";
 import AfterNavbar from "./AfterNavbar";
 import BeforeNavBar from "./BeforeNavbar";
 import About from "./page/about/About";
+import { isDarkAtom } from "@recoil/darkmode";
+import { ThemeProvider } from "styled-components";
+import { darkTheme, lightTheme } from "../styles/theme";
 
 export interface LayoutProps {
   children: React.ReactNode;
 }
 export default function Layout({ children }: LayoutProps) {
+  const isDarkMode = useRecoilValue(isDarkAtom);
   const isLoginStateAtom = useRecoilValue(loginStateSelector);
   const user = useRecoilValue(userAtom);
   const [isLoginState, setIsLoginState] = useState<boolean>(false);
   const router = useRouter();
-
   useEffect(() => {
     setIsLoginState(isLoginStateAtom);
   }, [isLoginStateAtom]);
@@ -31,11 +34,13 @@ export default function Layout({ children }: LayoutProps) {
   return (
     <>
       {isLoginState && (
-        <LayoutWrapper>
-          <AfterNavbar />
-          {/* <div>로그인된상태</div> */}
-          <div>{children}</div>
-        </LayoutWrapper>
+        <ThemeProvider theme={isDarkMode ? darkTheme : lightTheme}>
+          <LayoutWrapper>
+            <AfterNavbar />
+            {/* <div>로그인된상태</div> */}
+            <div>{children}</div>
+          </LayoutWrapper>
+        </ThemeProvider>
       )}
       {isLoginState || (
         <>
