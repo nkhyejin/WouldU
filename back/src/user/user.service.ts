@@ -137,12 +137,7 @@ export class UserService {
 
   async findAll() {
     const users = await this.userRepository.find();
-    const userList = [];
-    for (const user of users) {
-      const item = this.userData(user);
-      userList.push(item);
-    }
-    return userList;
+    return users.map((user) => this.userData(user));
   }
 
   async findUser(id: string) {
@@ -150,11 +145,11 @@ export class UserService {
     return this.userData(user);
   }
 
-  arrayToString(array: String[]) {
+  arrayToString(array: string[]) {
     return array.toString();
   }
 
-  stringToArray(string: String) {
+  stringToArray(string: string) {
     return string.split(',');
   }
 

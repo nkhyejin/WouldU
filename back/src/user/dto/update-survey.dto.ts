@@ -4,5 +4,5 @@ import { IsArray } from 'class-validator';
 export class UpdateSurveyDTO {
   @ApiProperty()
   @IsArray()
-  survey: Array<String>;
+  survey: Array<string>;
 }
