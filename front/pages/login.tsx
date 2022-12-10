@@ -14,6 +14,8 @@ import withGetServerSideProps from "@hocs/withGetServerSideProps";
 import { isFindPasswordModalAtom } from "@recoil/modal";
 import FindPasswordForm from "@components/FindPasswordForm";
 import { kakaoInit } from "@services/utils/kakaoInit";
+import { GoogleOAuthProvider } from "@react-oauth/google";
+import { GoogleLogin } from "@react-oauth/google";
 
 const Login = () => {
   const router = useRouter();
@@ -25,6 +27,7 @@ const Login = () => {
     watch,
     formState: { errors },
   } = useForm<UserLoginForm>();
+  const GOOGLE_KEY = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
 
   const onLoginSubmit = async (data: UserLoginForm) => {
     try {
@@ -84,6 +87,16 @@ const Login = () => {
             <IconBox social={LOGIN.GOOGLE}>
               <Image src={"/icon/google_icon.svg"} width={20} height={20} alt="google" />
             </IconBox>
+            <GoogleOAuthProvider clientId={`${GOOGLE_KEY}`}>
+              <GoogleLogin
+                onSuccess={credentialResponse => {
+                  console.log(credentialResponse);
+                }}
+                onError={() => {
+                  console.log("Login Failed");
+                }}
+              />
+            </GoogleOAuthProvider>
           </SocialBox>
         </SocialContainer>
         <EtcBox>
