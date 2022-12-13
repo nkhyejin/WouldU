@@ -30,10 +30,16 @@ export const checkRequestFriend = async (side: requestType) => {
 // 현재 친구확인
 export const getFriend = async () => {
   try {
-    const { data } = await axiosInstance.get("friend");
-    // console.log(data);
+    const res = await axiosInstance.get("friend");
+    if (res.status === 200) {
+      return res.data;
+    } else {
+      return "";
+    }
 
-    return data;
+    // else if (res.status === 204) {
+    //   console.log("맺은친구 없음");
+    // }
   } catch (err) {
     if (axios.isAxiosError(err) && err?.response?.status) {
       // console.log(err.response.data);
