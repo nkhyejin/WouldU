@@ -46,7 +46,7 @@ const MyInfo = () => {
       <UpperBox>
         <InfoArea className="info">
           <UserIcon width={90} height={90} />
-          <p className="nickname">{`${user?.nickname} 님`}</p>
+          <p className="nickname">{user !== undefined ? `${user?.nickname} 님` : ""}</p>
           <p className="email">{user?.email}</p>
         </InfoArea>
         <CategoryArea>

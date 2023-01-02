@@ -11,6 +11,7 @@ import { RecoilRoot } from "recoil";
 import { Hydrate, QueryClient, QueryClientProvider } from "@tanstack/react-query";
 // import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import Script from "next/script";
+import Loading from "@components/Loading";
 
 declare global {
   interface Window {
@@ -18,7 +19,14 @@ declare global {
   }
 }
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 60 * 1000,
+      // suspense: true,
+    },
+  },
+});
 
 export default function App({ Component, pageProps }: AppProps<SeoPageProps>) {
   const { pageTitle, pageDesc } = pageProps;
@@ -49,7 +57,7 @@ export default function App({ Component, pageProps }: AppProps<SeoPageProps>) {
           <Hydrate state={pageProps.dehydratedState}>
             <GlobalStyle />
             <ErrorBoundary FallbackComponent={Error}>
-              <Suspense fallback={<div>loading...</div>}>
+              <Suspense fallback={<Loading />}>
                 <Layout darkMode={darkMode} setDarkMode={setDarkMode}>
                   <Seo pageTitle={pageTitle} pageDesc={pageDesc}></Seo>
                   <Component {...pageProps} />
