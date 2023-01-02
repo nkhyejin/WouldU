@@ -6,6 +6,7 @@ import AfterNavbar from "./nav/AfterNavbar";
 import AlarmModal from "./modal/AlarmModal";
 import BeforeNavBar from "./nav/BeforeNavbar";
 import SurveyModal from "./page/mypage/modal/SurveyModal";
+import Portal from "./modal/ModalPortal";
 
 export interface LayoutProps {
   children: React.ReactNode;
@@ -27,8 +28,12 @@ const Layout = ({ children, darkMode, setDarkMode }: LayoutProps) => {
         <LayoutWrapper>
           <AfterNavbar darkMode={darkMode} setDarkMode={setDarkMode} />
           <div>{children}</div>
-          <AlarmModal />
-          {user && user?.isFirstLogin === 0 && <SurveyModal />}
+          <Portal>
+            <AlarmModal />
+          </Portal>
+          <Portal>
+            <SurveyModal />
+          </Portal>
         </LayoutWrapper>
       )}
       {isLoginState || (
