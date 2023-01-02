@@ -33,9 +33,43 @@ const mapPathToDesc: { [key: string]: string } = {
   [PATH.MYPAGE]: "마이페이지 입니다.",
 };
 
+type cookieType = {
+  userToken?: string;
+  [key: string]: any;
+};
+const accessPage = [PATH.LOGIN, PATH.JOIN];
+
+const cookieStringToObject = (cookieString: string) => {
+  let cookie = [];
+  if (!cookieString) {
+    return {};
+  } else {
+    cookie = cookieString.split("; ");
+    let result: cookieType = {};
+
+    for (let i = 0; i < cookie.length; i++) {
+      const [property, value] = cookie[i].split("=");
+      result[property] = value;
+    }
+    return result;
+  }
+};
+
 const withGetServerSideProps = (getServerSideProps: GetServerSideProps) => {
   return async (context: GetServerSidePropsContext) => {
     const pagePath = context.resolvedUrl;
+
+    const cookies: string = context.req ? context.req.headers.cookie! : "";
+    const cookiesObj = cookieStringToObject(cookies);
+    if (!cookiesObj.userToken && !accessPage.includes(pagePath)) {
+      return {
+        redirect: {
+          destination: "/",
+          permanent: false,
+        },
+      };
+    }
+
     return await getServerSideProps(context).then((res: { [key: string]: any }) => {
       return {
         ...res,

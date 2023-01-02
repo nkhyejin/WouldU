@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { colors } from "../../styles/common_style";
 import { Box } from "@styles/layout";

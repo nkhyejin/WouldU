@@ -1,5 +1,6 @@
 import { CirclePlusIcon } from "@components/icons/CircleIcon";
 import { UserIcon } from "@components/icons/UserIcon";
+import Portal from "@components/modal/ModalPortal";
 import { isCodeModalAtom } from "@recoil/friend";
 import { userAtom } from "@recoil/user";
 import { useRecoilValue, useSetRecoilState } from "recoil";
@@ -33,7 +34,9 @@ const BeforeConnect = () => {
       <div className="button">
         <Button onClick={() => setIsCodeShow(true)}>친구 연결 코드 입력</Button>
       </div>
-      <FriendConnectModal />
+      <Portal>
+        <FriendConnectModal />
+      </Portal>
     </ContentArea>
   );
 };

@@ -1,6 +1,7 @@
 import { PencilIcon, SmallCheckIcon } from "@components/icons/CheckIcon";
 import { HandshakeIcon } from "@components/icons/HandshakeIcon";
 import { UserIcon } from "@components/icons/UserIcon";
+import Portal from "@components/modal/ModalPortal";
 import { isDisconnectModalAtom } from "@recoil/modal";
 import { userAtom } from "@recoil/user";
 import { changeDiaryTitle } from "@services/api/friend";
@@ -105,7 +106,9 @@ const AfterConnect = ({ friend }: FriendProps) => {
           </Dday>
         </div>
         <DisconnectA onClick={() => setIsDisconnectOpen(true)}>연결 끊기</DisconnectA>
-        <FriendDisconnectModal />
+        <Portal>
+          <FriendDisconnectModal />
+        </Portal>
       </ContentArea>
     </>
   );

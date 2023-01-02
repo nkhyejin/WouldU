@@ -1,4 +1,5 @@
 import { UserIcon } from "@components/icons/UserIcon";
+import Portal from "@components/modal/ModalPortal";
 import SurveyModal from "@components/page/mypage/modal/SurveyModal";
 import {
   isChangeNicknameModalAtom,
@@ -45,7 +46,7 @@ const MyInfo = () => {
       <UpperBox>
         <InfoArea className="info">
           <UserIcon width={90} height={90} />
-          <p className="nickname">{`${user?.nickname} 님`}</p>
+          <p className="nickname">{user !== undefined ? `${user?.nickname} 님` : ""}</p>
           <p className="email">{user?.email}</p>
         </InfoArea>
         <CategoryArea>
@@ -64,10 +65,18 @@ const MyInfo = () => {
         </ButtonArea>
         <DeleteUserButton onClick={() => setIsDeleteUserOpen(true)}>회원 탈퇴</DeleteUserButton>
       </UnderButtonBox>
-      <ChangeNicknameModal />
-      <ChangePasswordModal />
-      <DeleteUserModal />
-      <SurveyModal />
+      <Portal>
+        <ChangeNicknameModal />
+      </Portal>
+      <Portal>
+        <ChangePasswordModal />
+      </Portal>
+      <Portal>
+        <DeleteUserModal />
+      </Portal>
+      <Portal>
+        <SurveyModal />
+      </Portal>
     </ContentArea>
   );
 };
