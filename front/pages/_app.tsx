@@ -17,6 +17,7 @@ declare global {
     Kakao: any;
   }
 }
+
 const queryClient = new QueryClient();
 
 export default function App({ Component, pageProps }: AppProps<SeoPageProps>) {

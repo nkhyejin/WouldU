@@ -14,6 +14,7 @@ import withGetServerSideProps from "@hocs/withGetServerSideProps";
 import { isFindPasswordModalAtom } from "@recoil/modal";
 import FindPasswordModal from "@components/modal/FindPasswordModal";
 import { kakaoInit } from "@services/utils/kakaoInit";
+import Portal from "@components/modal/ModalPortal";
 
 const Login = () => {
   const router = useRouter();
@@ -92,7 +93,9 @@ const Login = () => {
           </EtcTextBox>
           <EtcTextBox onClick={() => setIsFindPasswordOpen(true)}>비밀번호 찾기</EtcTextBox>
         </EtcBox>
-        <FindPasswordModal />
+        <Portal>
+          <FindPasswordModal />
+        </Portal>
       </LoginContainer>
     </LoginWrap>
   );
